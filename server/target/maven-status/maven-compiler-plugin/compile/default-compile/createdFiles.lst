@@ -1,0 +1,9 @@
+server\core\CommandExecutor.class
+server\network\ServerNetworkHandler.class
+server\network\ResponseSender.class
+server\core\IdGenerator.class
+server\network\RequestReader.class
+server\network\ConnectionAcceptor.class
+server\core\CollectionManager.class
+server\FileManager.class
+server\ServerMain.class

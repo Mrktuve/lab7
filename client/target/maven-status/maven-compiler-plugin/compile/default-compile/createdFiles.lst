@@ -1,0 +1,5 @@
+client\ClientMain.class
+client\input\CommandBuilder.class
+client\input\ConsoleReader.class
+client\input\Validator.class
+client\network\NetworkClient.class
