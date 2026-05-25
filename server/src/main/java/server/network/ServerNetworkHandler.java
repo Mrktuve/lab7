@@ -13,90 +13,56 @@ import java.util.concurrent.Executors;
 public class ServerNetworkHandler {
 
     private final int port;
-
-    private final CommandExecutor
-            commandExecutor;
+    private final CommandExecutor commandExecutor;
 
     private final RequestReader
-            requestReader =
-            new RequestReader();
+            requestReader = new RequestReader();
 
     private final ResponseSender
-            responseSender =
-            new ResponseSender();
+            responseSender = new ResponseSender();
 
-    // ТЗ
     // чтение запросов
     private final ExecutorService
-            readPool =
-            Executors.newFixedThreadPool(4);
+            readPool = Executors.newFixedThreadPool(4);
 
-    // ТЗ
+
     // отправка ответа
     private final ExecutorService
-            sendPool =
-            Executors.newCachedThreadPool();
+            sendPool = Executors.newCachedThreadPool();
 
     public ServerNetworkHandler(
-            int port,
-            CommandExecutor executor
+            int port, CommandExecutor executor
     ) {
 
         this.port = port;
-
-        this.commandExecutor =
-                executor;
+        this.commandExecutor = executor;
     }
 
     public void start() {
 
         try (
-                ServerSocket serverSocket =
-                        new ServerSocket(port)
+                ServerSocket serverSocket = new ServerSocket(port)
         ) {
 
-            System.out.println(
-                    "Server started: "
-                            + port
-            );
+            System.out.println("Server started: " + port);
 
             while (true) {
-
-                Socket clientSocket =
-                        serverSocket.accept();
+                Socket clientSocket = serverSocket.accept();
 
                 // чтение
                 readPool.submit(() -> {
-
-                    Request request =
-                            requestReader
-                                    .read(
-                                            clientSocket
-                                    );
-
+                    Request request = requestReader.read(clientSocket);
                     if (request == null) {
-
                         return;
                     }
 
-                    // ТЗ:
                     // отдельный поток
                     new Thread(() -> {
 
-                        Response response =
-                                commandExecutor
-                                        .execute(
-                                                request
-                                        );
+                        Response response = commandExecutor.execute(request);
 
                         // отправка
-                        sendPool.submit(
-                                () ->
-                                        responseSender
-                                                .send(
-                                                        clientSocket,
-                                                        response
-                                                )
+                        sendPool.submit(() -> responseSender.send(clientSocket, response)
                         );
 
                     }).start();

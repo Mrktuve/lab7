@@ -322,11 +322,5 @@ public class CommandExecutor {
             );
         }
 
-            return new Response(
-                    false,
-                    "Execution error: "
-                            + e.getMessage()
-            );
-        }
     }
 }

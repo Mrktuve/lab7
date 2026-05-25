@@ -86,10 +86,7 @@ public class WorkerDAO {
 
             stmt.setDate(
                     6,
-                    Date.valueOf(
-                            worker
-                                    .getStartDate()
-                    )
+                    Date.valueOf(String.valueOf(worker.getStartDate()))
             );
 
             if (worker.getEndDate()
@@ -119,8 +116,7 @@ public class WorkerDAO {
 
             stmt.setInt(
                     9,
-                    worker.getPerson()
-                            .getHeight()
+                    Math.toIntExact(worker.getPerson().getHeight())
             );
 
             stmt.setString(

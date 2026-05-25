@@ -16,49 +16,25 @@ public class ServerMain {
 
         try {
 
-            DatabaseManager db =
-                    new DatabaseManager(
-                            "s502880",
-                            "lzCd,5009"
-                    );
+            DatabaseManager db = new DatabaseManager("s502880", "lzCd,5009");
 
             db.connect();
 
-            UserDAO userDAO =
-                    new UserDAO(db);
+            UserDAO userDAO = new UserDAO(db);
 
-            WorkerDAO workerDAO =
-                    new WorkerDAO(db);
+            WorkerDAO workerDAO = new WorkerDAO(db);
 
-            AuthManager auth =
-                    new AuthManager(
-                            userDAO
-                    );
+            AuthManager auth = new AuthManager(userDAO);
 
-            CollectionManager
-                    manager =
-                    new CollectionManager(
-                            workerDAO
-                    );
+            CollectionManager manager = new CollectionManager(workerDAO);
 
-            CommandExecutor
-                    executor =
-                    new CommandExecutor(
-                            manager,
-                            auth
-                    );
+            CommandExecutor executor = new CommandExecutor(manager, auth);
 
-            ServerNetworkHandler
-                    server =
-                    new ServerNetworkHandler(
-                            2222,
-                            executor
-                    );
+            ServerNetworkHandler server = new ServerNetworkHandler(2222, executor);
 
             server.start();
 
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }
