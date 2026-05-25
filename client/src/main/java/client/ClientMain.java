@@ -2,6 +2,7 @@ package client;
 
 import client.auth.ClientAuthManager;
 import client.input.CommandBuilder;
+import client.input.ConsoleReader;
 import client.network.NetworkClient;
 import common.commands.Command;
 import common.network.Request;
@@ -27,10 +28,8 @@ public class ClientMain {
         ClientAuthManager auth =
                 new ClientAuthManager();
 
-        CommandBuilder builder =
-                new CommandBuilder(
-                        scanner
-                );
+        ConsoleReader consoleReader = new ConsoleReader();
+        CommandBuilder builder = new CommandBuilder(consoleReader);
 
         System.out.println(
                 "Type register or login"

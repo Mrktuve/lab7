@@ -3,17 +3,25 @@ package client.input;
 import java.util.Scanner;
 
 public class ConsoleReader {
-    private static Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
 
-    public static String readLine() {
+    public ConsoleReader() {
+        this.scanner = new Scanner(System.in);
+    }
+
+    public ConsoleReader(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public String readLine() {
         return scanner.nextLine().trim();
     }
 
-    public static void print(String message) {
+    public void print(String message) {
         System.out.print(message);
     }
 
-    public static void println(String message) {
+    public void println(String message) {
         System.out.println(message);
     }
 }

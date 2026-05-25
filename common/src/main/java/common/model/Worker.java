@@ -3,10 +3,12 @@ package common.model;
 import common.enums.Status;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Worker implements Serializable {
+    private String name;
     private Long id; // генерируется сервером
     private String ownerLogin; // не null, не пустой
     private Coordinates coordinates; // не null
@@ -49,6 +51,10 @@ public class Worker implements Serializable {
         this.status = status;
         this.person = person;
         this.ownerLogin = ownerLogin;
+    }
+
+    public static Worker fromResultSet(ResultSet rs) {
+        return null;
     }
 
 

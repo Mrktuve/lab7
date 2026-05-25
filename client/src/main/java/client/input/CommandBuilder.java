@@ -1,20 +1,23 @@
 package client.input;
 
 import common.commands.*;
-import common.enums.*;
 import common.model.*;
-import java.time.LocalDateTime;
+
 
 public class CommandBuilder {
 
     private final ConsoleReader reader;
-
+    private String ownerLogin;
 
     public CommandBuilder(ConsoleReader reader) {
         this.reader = reader;
+        this.ownerLogin = "";
     }
-
-    public Command build(String input) {
+    public void setOwnerLogin(String ownerLogin) {
+        this.ownerLogin = ownerLogin;
+    }
+    public Command build() {
+        String input = reader.readLine();
         if (input == null) return null;
         input = input.trim().toLowerCase();
         String[] parts = input.split(" ");
