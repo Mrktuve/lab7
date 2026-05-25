@@ -25,7 +25,7 @@ public class NetworkClient {
 
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream())
         ) {
-
+            System.out.println("Connected to server");
             out.writeObject(request);
             out.flush();
 
