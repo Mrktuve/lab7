@@ -6,8 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseManager {
 
-    private static final String URL =
-            "jdbc:postgresql://pg:5432/studs";
+    private static final String URL = "jdbc:postgresql://localhost:5432/studs";
 
     private final String username;
     private final String password;
@@ -41,23 +40,4 @@ public class DatabaseManager {
         return connection;
     }
 
-    public void close() {
-
-        try {
-
-            if (connection != null
-                    && !connection.isClosed()) {
-
-                connection.close();
-            }
-
-        } catch (SQLException e) {
-
-            System.out.println(
-                    "Database close error"
-            );
-
-            e.printStackTrace();
-        }
-    }
 }
