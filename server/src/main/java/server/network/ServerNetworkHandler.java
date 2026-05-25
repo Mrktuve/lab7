@@ -40,30 +40,25 @@ public class ServerNetworkHandler {
 
     public void start() {
 
-        try (
-                ServerSocket serverSocket = new ServerSocket(port)
-        ) {
-
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started: " + port);
+            System.out.println("Waiting for clients...");
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
+                System.out.println("Client connected: " + clientSocket.getInetAddress());
 
-                // чтение
                 readPool.submit(() -> {
                     Request request = requestReader.read(clientSocket);
                     if (request == null) {
                         return;
                     }
 
-                    // отдельный поток
                     new Thread(() -> {
 
                         Response response = commandExecutor.execute(request);
 
-                        // отправка
-                        sendPool.submit(() -> responseSender.send(clientSocket, response)
-                        );
+                        sendPool.submit(() -> responseSender.send(clientSocket, response));
 
                     }).start();
                 });
