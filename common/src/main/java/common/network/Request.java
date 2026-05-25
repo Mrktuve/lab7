@@ -11,10 +11,7 @@ public class Request implements Serializable {
     private final String login;
     private final String password;
 
-    public Request(Command command,
-                   String login,
-                   String password) {
-
+    public Request(Command command, String login, String password) {
         this.command = command;
         this.login = login;
         this.password = password;

@@ -5,16 +5,10 @@ public class ClientAuthManager {
     private String login;
     private String password;
 
-    public void setCredentials(
-            String login,
-            String password
-    ) {
+    public void setCredentials(String login, String password) {
 
-        this.login =
-                login;
-
-        this.password =
-                password;
+        this.login = login;
+        this.password = password;
     }
 
     public String getLogin() {
@@ -26,8 +20,6 @@ public class ClientAuthManager {
     }
 
     public boolean isAuthorized() {
-
-        return login != null
-                && password != null;
+        return login != null && password != null;
     }
 }

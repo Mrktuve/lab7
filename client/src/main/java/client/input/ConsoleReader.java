@@ -9,9 +9,6 @@ public class ConsoleReader {
         this.scanner = new Scanner(System.in);
     }
 
-    public ConsoleReader(Scanner scanner) {
-        this.scanner = scanner;
-    }
 
     public String readLine() {
         return scanner.nextLine().trim();

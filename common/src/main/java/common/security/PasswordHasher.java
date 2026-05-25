@@ -10,30 +10,20 @@ public class PasswordHasher {
     public static String hashPassword(String password) {
 
         try {
+            MessageDigest md = MessageDigest.getInstance("MD2");
 
-            MessageDigest md =
-                    MessageDigest.getInstance("MD2");
+            byte[] bytes = md.digest(password.getBytes());
 
-            byte[] bytes =
-                    md.digest(password.getBytes());
-
-            StringBuilder builder =
-                    new StringBuilder();
+            StringBuilder builder = new StringBuilder();
 
             for (byte b : bytes) {
-                builder.append(
-                        String.format("%02x", b)
-                );
+                builder.append(String.format("%02x", b));
             }
-
             return builder.toString();
 
         } catch (NoSuchAlgorithmException e) {
 
-            throw new RuntimeException(
-                    "MD2 algorithm not found",
-                    e
-            );
+            throw new RuntimeException("MD2 algorithm not found", e);
         }
     }
 }
