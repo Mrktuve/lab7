@@ -2,22 +2,26 @@ package server.network;
 
 import common.network.Response;
 
-import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ResponseSender {
 
     public void send(Socket socket, Response response) {
-        try {
 
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        try {
+            OutputStream os = socket.getOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(os);
 
             out.writeObject(response);
-
             out.flush();
 
-        } catch (IOException e) {
+            socket.shutdownOutput();
+            socket.close();
+
+        } catch (Exception e) {
+
             e.printStackTrace();
         }
     }

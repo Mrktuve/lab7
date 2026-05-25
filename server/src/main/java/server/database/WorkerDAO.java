@@ -90,6 +90,7 @@ public class WorkerDAO {
         }
     }
 
+
     public List<Worker> loadCollection() {
 
         List<Worker> workers = new ArrayList<>();

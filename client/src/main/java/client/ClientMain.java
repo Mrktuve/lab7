@@ -8,20 +8,18 @@ import common.commands.Command;
 import common.network.Request;
 import common.network.Response;
 
-import java.util.Scanner;
 
 public class ClientMain {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
 
         NetworkClient client = new NetworkClient("localhost", 2222);
 
         ClientAuthManager auth = new ClientAuthManager();
 
-        ConsoleReader consoleReader = new ConsoleReader();
-        CommandBuilder builder = new CommandBuilder(consoleReader);
+        ConsoleReader reader = new ConsoleReader();
+        CommandBuilder builder = new CommandBuilder(reader);
 
         System.out.println(
                 "Type register or login"
@@ -40,12 +38,12 @@ public class ClientMain {
                 if (commandName.equals("register") || commandName.equals("login")) {
 
                     System.out.print("Login: ");
-
-                    String login = scanner.nextLine();
+                    String login = reader.readLine();
 
                     System.out.print("Password: ");
+                    String password = reader.readLine();
 
-                    String password = scanner.nextLine();
+
 
                     Request request = new Request(command, login, password);
 

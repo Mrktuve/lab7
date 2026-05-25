@@ -2,23 +2,20 @@ package server.network;
 
 import common.network.Request;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
 public class RequestReader {
 
     public Request read(Socket socket) {
-        try {
 
+        try {
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-            return (Request)
-                    in.readObject();
+            return (Request) in.readObject();
 
-        } catch (
-                IOException | ClassNotFoundException e
-        ) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

@@ -16,9 +16,6 @@ public class CommandBuilder {
         this.reader = reader;
         this.ownerLogin = "";
     }
-    public void setOwnerLogin(String ownerLogin) {
-        this.ownerLogin = ownerLogin;
-    }
     public Command build() {
         String input = reader.readLine();
         if (input == null) return null;

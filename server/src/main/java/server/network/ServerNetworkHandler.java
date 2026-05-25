@@ -14,21 +14,10 @@ public class ServerNetworkHandler {
 
     private final int port;
     private final CommandExecutor commandExecutor;
-
-    private final RequestReader
-            requestReader = new RequestReader();
-
-    private final ResponseSender
-            responseSender = new ResponseSender();
-
-    // чтение запросов
-    private final ExecutorService
-            readPool = Executors.newFixedThreadPool(4);
-
-
-    // отправка ответа
-    private final ExecutorService
-            sendPool = Executors.newCachedThreadPool();
+    private final RequestReader requestReader = new RequestReader();
+    private final ResponseSender responseSender = new ResponseSender();
+    private final ExecutorService readPool = Executors.newFixedThreadPool(4);
+    private final ExecutorService sendPool = Executors.newCachedThreadPool();
 
     public ServerNetworkHandler(
             int port, CommandExecutor executor

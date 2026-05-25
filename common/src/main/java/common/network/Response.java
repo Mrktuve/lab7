@@ -2,9 +2,7 @@ package common.network;
 
 import java.io.Serializable;
 
-public class Response
-        implements Serializable {
-
+public class Response implements Serializable {
     private static final long serialVersionUID = 1L;
     private final boolean success;
     private final String message;
