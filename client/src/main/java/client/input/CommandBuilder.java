@@ -2,6 +2,9 @@ package client.input;
 
 import common.commands.*;
 import common.model.*;
+import common.enums.*;
+
+import java.time.LocalDateTime;
 
 
 public class CommandBuilder {
@@ -61,12 +64,12 @@ public class CommandBuilder {
                 case "execute_script" -> {
                     yield new ExecuteScript(parts[1]);
                 }
-                case "login":
-                    return new Login();
-
-                case "register":
-                    return new Register();
-
+                case "login" -> {
+                    yield new Login();
+                }
+                case "register" -> {
+                    yield new Register();
+                }
                 default -> throw new IllegalArgumentException("Unknown command");
             };
 

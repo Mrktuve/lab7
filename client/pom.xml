@@ -22,7 +22,7 @@
 
         <!-- Подключаем common -->
         <dependency>
-            <groupId>lab6</groupId>
+            <groupId>lab7</groupId>
             <artifactId>common</artifactId>
             <version>1.0</version>
         </dependency>
