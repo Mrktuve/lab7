@@ -36,11 +36,13 @@ public class CommandBuilder {
                 case "exit" -> new Exit();
 
                 case "remove_by_id" -> {
+                    if (parts.length < 2) throw new IllegalArgumentException("remove_by_id требует id");
                     long id = Validator.parseLong(parts[1]);
-                    yield new RemoveById(id); // yield - возвращает результат switch
+                    yield new RemoveById(id);// yield - возвращает результат switch
                 }
 
                 case "update" -> {
+                    if (parts.length < 2) throw new IllegalArgumentException("update требует id");
                     long id = Validator.parseLong(parts[1]);
                     yield new UpdateId(id, readWorker());
                 }
@@ -48,17 +50,22 @@ public class CommandBuilder {
                 case "remove_lower" -> new RemoveLower(readWorker());
 
                 case "remove_any_by_status" -> {
+                    if (parts.length < 2) throw new IllegalArgumentException("remove_any_by_status требует статус");
                     Status status = Status.valueOf(parts[1].toUpperCase());
                     yield new RemoveAnyByStatus(status);
                 }
 
                 case "filter_starts_with_name" -> {
+                    if (parts.length < 2) throw new IllegalArgumentException("filter_starts_with_name требует имя");
                     yield new FilterStartsWithName(parts[1]);
                 }
 
                 case "print_descending" -> new PrintDescending();
 
                 case "execute_script" -> {
+                    if (parts.length < 2) {
+                        throw new IllegalArgumentException("execute_script требует аргумент: путь к файлу");
+                    }
                     yield new ExecuteScript(parts[1]);
                 }
                 case "login" -> {
