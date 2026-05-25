@@ -12,52 +12,27 @@ public class NetworkClient {
     private final String host;
     private final int port;
 
-    public NetworkClient(
-            String host,
-            int port
-    ) {
+    public NetworkClient(String host, int port) {
 
         this.host = host;
         this.port = port;
     }
 
-    public Response sendRequest(
-            Request request
-    ) {
+    public Response sendRequest(Request request) {
 
-        try (
-                Socket socket =
-                        new Socket(
-                                host,
-                                port
-                        );
-
-                ObjectOutputStream out =
-                        new ObjectOutputStream(
-                                socket.getOutputStream()
-                        );
-
-                ObjectInputStream in =
-                        new ObjectInputStream(
-                                socket.getInputStream()
-                        )
-        ) {
-
+        try (Socket socket = new Socket(host, port);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
             out.writeObject(request);
             out.flush();
 
-            return (Response)
-                    in.readObject();
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            return (Response) in.readObject();
 
         } catch (Exception e) {
 
             e.printStackTrace();
 
-            return new Response(
-                    false,
-                    "Connection error: "
-                            + e.getMessage()
-            );
+            return new Response(false, "Connection error: " + e.getMessage());
         }
     }
 }

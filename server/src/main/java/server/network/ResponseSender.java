@@ -11,13 +11,11 @@ public class ResponseSender {
     public void send(Socket socket, Response response) {
 
         try {
-            OutputStream os = socket.getOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(os);
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
             out.writeObject(response);
             out.flush();
 
-            socket.shutdownOutput();
             socket.close();
 
         } catch (Exception e) {
