@@ -8,318 +8,141 @@ import server.auth.AuthManager;
 
 public class CommandExecutor {
 
-    private final CollectionManager
-            manager;
+    private final CollectionManager manager;
+    private final AuthManager authManager;
 
-    private final AuthManager
-            authManager;
+    public CommandExecutor(CollectionManager manager, AuthManager authManager) {
 
-    public CommandExecutor(
-            CollectionManager manager,
-            AuthManager authManager
-    ) {
-
-        this.manager =
-                manager;
-
-        this.authManager =
-                authManager;
+        this.manager = manager;
+        this.authManager = authManager;
     }
 
-    public Response execute(
-            Request request
-    ) {
+    public Response execute(Request request) {
 
-        Command command =
-                request
-                        .getCommand();
+        Command command = request.getCommand();
 
         if (command == null) {
-
-            return new Response(
-                    false,
-                    "Command is null"
-            );
+            return new Response(false, "Command is null");
         }
 
-        String login =
-                request.getLogin();
+        String login = request.getLogin();
 
-        String password =
-                request.getPassword();
+        String password = request.getPassword();
 
-        // register
-        if (command
-                instanceof Register) {
 
-            boolean success =
-                    authManager
-                            .register(
-                                    login,
-                                    password
-                            );
+        if (command instanceof Register) {
 
-            return new Response(
-                    success,
-                    success
-                            ? "Registered"
-                            : "Registration failed"
-            );
+            boolean success = authManager.register(login, password);
+
+            return new Response(success, success ? "Registered" : "Registration failed");
         }
 
-        // login
-        if (command
-                instanceof Login) {
 
-            boolean success =
-                    authManager
-                            .login(
-                                    login,
-                                    password
-                            );
+        if (command instanceof Login) {
 
-            return new Response(
-                    success,
-                    success
-                            ? "Logged in"
-                            : "Wrong login/password"
-            );
+            boolean success = authManager.login(login, password);
+
+            return new Response(success, success ? "Logged in" : "Wrong login/password");
         }
 
-        // auth required
-        if (!authManager
-                .authenticate(
-                        login,
-                        password
-                )) {
 
-            return new Response(
-                    false,
-                    "You are not authorized"
-            );
+        if (!authManager.authenticate(login, password)) {
+
+            return new Response(false, "You are not authorized");
         }
 
         try {
+            if (command instanceof Add add) {
+                Worker worker = add.getWorker();
+                worker.setOwnerLogin(login);
 
-            // ADD
-            if (command
-                    instanceof Add add) {
+                boolean success = manager.add(worker);
 
-                Worker worker =
-                        add.getWorker();
-
-                worker
-                        .setOwnerLogin(
-                                login
-                        );
-
-                boolean success =
-                        manager.add(
-                                worker
-                        );
-
-                return new Response(
-                        success,
-                        success
-                                ? "Worker added"
-                                : "DB add error"
-                );
+                return new Response(success, success ? "Worker added" : "DB add error");
             }
 
-            // SHOW
-            if (command
-                    instanceof Show) {
+            if (command instanceof Show) {
+                StringBuilder sb = new StringBuilder();
 
-                StringBuilder sb =
-                        new StringBuilder();
-
-                for (Worker worker :
-                        manager
-                                .getCollection()) {
-
-                    sb.append(worker)
-                            .append("\n");
+                for (Worker worker : manager.getCollection()) {
+                    sb.append(worker).append("\n");
                 }
 
-                return new Response(
-                        true,
-                        sb.toString()
-                );
+                return new Response(true, sb.toString());
             }
 
-            // INFO
-            if (command
-                    instanceof Info) {
 
-                return new Response(
-                        true,
-                        "Collection type: "
-                                + manager
+            if (command instanceof Info) {
+
+                return new Response(true, "Collection type: " + manager
                                 .getCollection()
                                 .getClass()
                                 .getSimpleName()
-
-                                + "\nSize: "
-
-                                + manager
-                                .getCollection()
-                                .size()
+                                + "\nSize: " + manager.getCollection().size()
                 );
             }
 
-            // REMOVE BY ID
-            if (command
-                    instanceof RemoveById cmd) {
-
-                Worker worker =
-                        manager.findById(
-                                cmd.getId()
-                        );
+            if (command instanceof RemoveById cmd) {
+                Worker worker = manager.findById(cmd.getId());
 
                 if (worker == null) {
-
-                    return new Response(
-                            false,
-                            "Worker not found"
-                    );
+                    return new Response(false, "Worker not found");
                 }
 
-                if (!worker
-                        .getOwnerLogin()
-                        .equals(login)) {
+                if (!worker.getOwnerLogin().equals(login)) {
 
-                    return new Response(
-                            false,
-                            "Not your object"
-                    );
+                    return new Response(false, "Not your object");
                 }
+                boolean removed = manager.removeById(cmd.getId());
 
-                boolean removed =
-                        manager.removeById(
-                                cmd.getId()
-                        );
-
-                return new Response(
-                        removed,
-                        removed
-                                ? "Removed"
-                                : "Remove failed"
-                );
+                return new Response(removed, removed ? "Removed" : "Remove failed");
             }
 
-            // UPDATE
-            if (command
-                    instanceof UpdateId cmd) {
 
-                Worker worker =
-                        cmd.getWorker();
+            if (command instanceof UpdateId cmd) {
 
-                boolean updated =
-                        manager.update(
-                                cmd.getId(),
-                                worker,
-                                login
-                        );
+                Worker worker = cmd.getWorker();
+                boolean updated = manager.update(cmd.getId(), worker, login);
 
-                return new Response(
-                        updated,
-                        updated
-                                ? "Updated"
-                                : "Cannot update чужой объект"
-                );
+                return new Response(updated, updated ? "Updated" : "Cannot update чужой объект");
             }
 
-            // CLEAR
-            if (command
-                    instanceof Clear) {
+            if (command instanceof Clear) {
+                manager.clearOwned(login);
 
-                manager.clearOwned(
-                        login
-                );
-
-                return new Response(
-                        true,
-                        "All your workers removed"
-                );
+                return new Response(true, "All your workers removed");
             }
 
-            // REMOVE LOWER
-            if (command
-                    instanceof RemoveLower cmd) {
 
-                int removed =
-                        manager.removeLower(
-                                cmd.getWorker(),
-                                login
-                        );
+            if (command instanceof RemoveLower cmd) {
+                int removed = manager.removeLower(cmd.getWorker(), login);
 
-                return new Response(
-                        true,
-                        "Removed: "
-                                + removed
-                );
+                return new Response(true, "Removed: " + removed);
             }
 
-            // REMOVE ANY BY STATUS
-            if (command
-                    instanceof RemoveAnyByStatus cmd) {
 
-                boolean removed =
-                        manager
-                                .removeAnyByStatus(
-                                        cmd
-                                                .getStatus()
-                                                .name(),
-                                        login
-                                );
+            if (command instanceof RemoveAnyByStatus cmd) {
+                boolean removed = manager.removeAnyByStatus(cmd.getStatus().name(), login);
 
-                return new Response(
-                        removed,
-                        removed
-                                ? "Removed"
-                                : "No owned worker found"
-                );
+                return new Response(removed, removed ? "Removed" : "No owned worker found");
             }
 
-            // ADD IF MAX
-            if (command
-                    instanceof AddIfMax cmd) {
 
-                Worker worker =
-                        cmd.getWorker();
+            if (command instanceof AddIfMax cmd) {
+                Worker worker = cmd.getWorker();
+                worker.setOwnerLogin(login);
 
-                worker
-                        .setOwnerLogin(
-                                login
-                        );
+                boolean added = manager.addIfMax(worker);
 
-                boolean added =
-                        manager.addIfMax(
-                                worker
-                        );
-
-                return new Response(
-                        added,
-                        added
-                                ? "Added"
-                                : "Not max"
-                );
+                return new Response(added, added ? "Added" : "Not max");
             }
 
-            return new Response(
-                    false,
-                    "Unknown command"
-            );
+            return new Response(false, "Unknown command");
 
         } catch (Exception e) {
-
             e.printStackTrace();
 
-            return new Response(
-                    false,
-                    "Execution error: "
-                            + e.getMessage()
-            );
+            return new Response(false, "Execution error: " + e.getMessage());
         }
 
     }

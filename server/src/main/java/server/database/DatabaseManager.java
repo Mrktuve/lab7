@@ -24,16 +24,9 @@ public class DatabaseManager {
     public void connect()
             throws SQLException {
 
-        connection =
-                DriverManager.getConnection(
-                        URL,
-                        username,
-                        password
-                );
+        connection = DriverManager.getConnection(URL, username, password);
 
-        System.out.println(
-                "Connected to PostgreSQL"
-        );
+        System.out.println("Connected to PostgreSQL");
     }
 
     public Connection getConnection() {

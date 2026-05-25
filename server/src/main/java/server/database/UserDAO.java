@@ -11,45 +11,27 @@ public class UserDAO {
 
     private final Connection connection;
 
-    public UserDAO(
-            DatabaseManager dbManager
-    ) {
-
-        this.connection =
-                dbManager.getConnection();
+    public UserDAO(DatabaseManager dbManager) {
+        this.connection = dbManager.getConnection();
     }
 
-    public boolean register(
-            String login,
-            String password
-    ) {
-
-        String sql =
-                """
+    public boolean register(String login, String password) {
+        String sql = """
                 INSERT INTO users
                 (login, password_hash)
                 VALUES (?, ?)
                 """;
 
         try (
-                PreparedStatement stmt =
-                        connection.prepareStatement(
-                                sql
-                        )
+                PreparedStatement stmt = connection.prepareStatement(sql)
         ) {
 
             stmt.setString(1, login);
 
-            stmt.setString(
-                    2,
-                    PasswordHasher
-                            .hashPassword(
-                                    password
-                            )
+            stmt.setString(2, PasswordHasher.hashPassword(password)
             );
 
             stmt.executeUpdate();
-
             return true;
 
         } catch (SQLException e) {
@@ -58,13 +40,9 @@ public class UserDAO {
         }
     }
 
-    public boolean login(
-            String login,
-            String password
-    ) {
+    public boolean login(String login, String password) {
 
-        String sql =
-                """
+        String sql = """
                 SELECT *
                 FROM users
                 WHERE login = ?
@@ -72,29 +50,17 @@ public class UserDAO {
                 """;
 
         try (
-                PreparedStatement stmt =
-                        connection.prepareStatement(
-                                sql
-                        )
+                PreparedStatement stmt = connection.prepareStatement(sql)
         ) {
 
             stmt.setString(1, login);
-
-            stmt.setString(
-                    2,
-                    PasswordHasher
-                            .hashPassword(
-                                    password
-                            )
+            stmt.setString(2, PasswordHasher.hashPassword(password)
             );
 
-            ResultSet rs =
-                    stmt.executeQuery();
-
+            ResultSet rs = stmt.executeQuery();
             return rs.next();
 
         } catch (SQLException e) {
-
             return false;
         }
     }

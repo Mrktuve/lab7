@@ -8,26 +8,17 @@ import java.net.Socket;
 
 public class RequestReader {
 
-    public Request read(
-            Socket socket
-    ) {
-
+    public Request read(Socket socket) {
         try {
 
-            ObjectInputStream in =
-                    new ObjectInputStream(
-                            socket
-                                    .getInputStream()
-                    );
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
             return (Request)
                     in.readObject();
 
         } catch (
-                IOException
-                | ClassNotFoundException e
+                IOException | ClassNotFoundException e
         ) {
-
             return null;
         }
     }

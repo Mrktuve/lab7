@@ -8,27 +8,16 @@ import java.net.Socket;
 
 public class ResponseSender {
 
-    public void send(
-            Socket socket,
-            Response response
-    ) {
-
+    public void send(Socket socket, Response response) {
         try {
 
-            ObjectOutputStream out =
-                    new ObjectOutputStream(
-                            socket
-                                    .getOutputStream()
-                    );
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
-            out.writeObject(
-                    response
-            );
+            out.writeObject(response);
 
             out.flush();
 
         } catch (IOException e) {
-
             e.printStackTrace();
         }
     }

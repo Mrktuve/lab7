@@ -16,7 +16,7 @@ public class ServerMain {
 
         try {
 
-            DatabaseManager db = new DatabaseManager("s502880", "lzCd,5009");
+            DatabaseManager db = new DatabaseManager("s502880", "GjmeEQmtBUUlgALJ");
 
             db.connect();
 
