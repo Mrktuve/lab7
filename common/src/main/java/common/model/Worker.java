@@ -1,9 +1,13 @@
 package common.model;
 
+import common.enums.Country;
+import common.enums.EyeColor;
+import common.enums.HairColor;
 import common.enums.Status;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -53,8 +57,39 @@ public class Worker implements Serializable {
         this.ownerLogin = ownerLogin;
     }
 
-    public static Worker fromResultSet(ResultSet rs) {
-        return null;
+    public static Worker fromResultSet(ResultSet rs) throws SQLException {
+        Coordinates coords = null;
+        try {
+            coords = new Coordinates(
+                    rs.getInt("coordinate_x"),
+                    rs.getLong("coordinate_y")
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        Person person = new Person(
+                rs.getLong("person_height"),
+                EyeColor.valueOf(rs.getString("person_eye_color")),
+                HairColor.valueOf(rs.getString("person_hair_color")),
+                Country.valueOf(rs.getString("person_nationality"))
+        );
+
+        Worker worker = new Worker(
+                rs.getString("name"),
+                coords,
+                rs.getDouble("salary"),
+                rs.getTimestamp("start_date").toLocalDateTime(),
+                rs.getTimestamp("end_date") != null ? rs.getTimestamp("end_date").toLocalDateTime() : null,
+                Status.valueOf(rs.getString("status")),
+                person,
+                rs.getString("owner_login")
+        );
+
+        worker.setId(rs.getLong("id"));
+        worker.setCreationDate(rs.getTimestamp("creation_date").toLocalDateTime());
+
+        return worker;
     }
 
 
