@@ -6,6 +6,9 @@ import common.network.Request;
 import common.network.Response;
 import server.auth.AuthManager;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
+
 public class CommandExecutor {
 
     private final CollectionManager manager;
@@ -47,6 +50,8 @@ public class CommandExecutor {
             if (command instanceof Add add) {
                 Worker worker = add.getWorker();
                 worker.setOwnerLogin(login);
+                worker.setCreationDate(LocalDateTime.now());
+                worker.setId(null);
 
                 boolean success = manager.add(worker);
                 return new Response(success, success ? "Worker added" : "DB add error");
@@ -111,11 +116,41 @@ public class CommandExecutor {
             if (command instanceof AddIfMax cmd) {
                 Worker worker = cmd.getWorker();
                 worker.setOwnerLogin(login);
+                worker.setCreationDate(LocalDateTime.now());
+                worker.setId(null);
 
                 boolean added = manager.addIfMax(worker);
                 return new Response(added, added ? "Added" : "Not max");
             }
 
+            if (command instanceof Help) {
+                String helpText = """
+        Доступные команды:
+        help - показать эту справку
+        info - информация о коллекции
+        show - показать все элементы
+        add {element} - добавить новый элемент
+        update id {element} - обновить элемент
+        remove_by_id id - удалить элемент по id
+        clear - очистить коллекцию (только ваши элементы)
+        exit - завершить программу
+        history - показать историю команд
+        print_descending - вывести элементы в порядке убывания зарплаты
+        filter_starts_with_name name - фильтр по началу имени
+        remove_lower {element} - удалить элементы меньше заданного
+        remove_any_by_status status - удалить любой элемент со статусом
+        add_if_max {element} - добавить, если зарплата больше максимума
+        """;
+                if (command instanceof PrintDescending) {
+                    StringBuilder sb = new StringBuilder();
+                    manager.getCollection()
+                            .stream()
+                            .sorted(Comparator.comparing(Worker::getSalary).reversed())
+                            .forEach(w -> sb.append(w).append("\n"));
+                    return new Response(true, sb.toString());
+                }
+                return new Response(true, helpText);
+            }
             return new Response(false, "Unknown command");
 
         } catch (Exception e) {
