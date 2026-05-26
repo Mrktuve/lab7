@@ -114,6 +114,7 @@ public class CommandBuilder {
 
         Person person = readPerson();
 
+
         return new Worker(name, coordinates, salary, startDate, endDate, status, person, ownerLogin);
     }
 

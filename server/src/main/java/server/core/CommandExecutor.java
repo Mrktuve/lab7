@@ -133,8 +133,6 @@ public class CommandExecutor {
         update id {element} - обновить элемент
         remove_by_id id - удалить элемент по id
         clear - очистить коллекцию (только ваши элементы)
-        exit - завершить программу
-        history - показать историю команд
         print_descending - вывести элементы в порядке убывания зарплаты
         filter_starts_with_name name - фильтр по началу имени
         remove_lower {element} - удалить элементы меньше заданного
