@@ -13,8 +13,8 @@ public class ResponseSender {
         try {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
-            out.writeObject(response);
-            out.flush();
+            out.writeObject(response); // преобразует обьект в респонз в байты и записывает в сокет
+            out.flush(); // принудительно сбрасывает все буферизованные байты в сеть
 
             socket.close();
 

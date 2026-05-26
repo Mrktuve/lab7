@@ -15,15 +15,11 @@ public class ClientMain {
 
 
         NetworkClient client = new NetworkClient("localhost", 2222);
-
         ClientAuthManager auth = new ClientAuthManager();
-
         ConsoleReader reader = new ConsoleReader();
         CommandBuilder builder = new CommandBuilder(reader);
 
-        System.out.println(
-                "Type register or login"
-        );
+        System.out.println("Type register or login");
 
         while (true) {
 
@@ -56,15 +52,12 @@ public class ClientMain {
 
                         System.out.println("Authorized");
                     }
-
                     continue;
                 }
 
 
                 if (!auth.isAuthorized()) {
-
                     System.out.println("Please login first");
-
                     continue;
                 }
 

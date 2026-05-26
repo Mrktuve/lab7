@@ -10,8 +10,10 @@ public class RequestReader {
     public Request read(Socket socket) {
 
         try {
+            //создаёт поток ввода, обёртывая байтовый поток сокета в объект для чтения сериализованных данных
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
+            //считывает след обьект и вовзращает методу
             return (Request) in.readObject();
 
         } catch (Exception e) {

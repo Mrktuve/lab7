@@ -19,10 +19,7 @@ public class ServerNetworkHandler {
     private final ExecutorService readPool = Executors.newFixedThreadPool(4);
     private final ExecutorService sendPool = Executors.newCachedThreadPool();
 
-    public ServerNetworkHandler(
-            int port, CommandExecutor executor
-    ) {
-
+    public ServerNetworkHandler(int port, CommandExecutor executor) {
         this.port = port;
         this.commandExecutor = executor;
     }
@@ -46,7 +43,6 @@ public class ServerNetworkHandler {
                     new Thread(() -> {
 
                         Response response = commandExecutor.execute(request);
-
                         sendPool.submit(() -> responseSender.send(clientSocket, response));
 
                     }).start();
@@ -54,7 +50,6 @@ public class ServerNetworkHandler {
             }
 
         } catch (IOException e) {
-
             e.printStackTrace();
         }
     }

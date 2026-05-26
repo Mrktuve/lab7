@@ -56,11 +56,9 @@ public class WorkerDAO {
             stmt.setDate(6, Date.valueOf(String.valueOf(worker.getStartDate())));
 
             if (worker.getEndDate() != null) {
-
                 stmt.setTimestamp(7, Timestamp.valueOf(worker.getEndDate()));
 
             } else {
-
                 stmt.setNull(7, Types.TIMESTAMP);
             }
 
@@ -92,21 +90,17 @@ public class WorkerDAO {
 
 
     public List<Worker> loadCollection() {
-
         List<Worker> workers = new ArrayList<>();
-
         String sql = "SELECT * FROM workers";
 
         try (
                 Statement stmt = connection.createStatement()
         ) {
-
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
 
                 Worker worker = Worker.fromResultSet(rs);
-
                 workers.add(worker);
             }
 

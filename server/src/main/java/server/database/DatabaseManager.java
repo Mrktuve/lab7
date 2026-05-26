@@ -21,11 +21,8 @@ public class DatabaseManager {
         this.password = password;
     }
 
-    public void connect()
-            throws SQLException {
-
+    public void connect() throws SQLException {
         connection = DriverManager.getConnection(URL, username, password);
-
         System.out.println("Connected to PostgreSQL");
     }
 
