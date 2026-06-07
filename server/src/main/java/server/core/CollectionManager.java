@@ -40,13 +40,17 @@ public class CollectionManager {
         return collection.stream().filter(w -> w.getId() == id).findFirst().orElse(null);
     }
     // находит обьект, если нет, то вернет false
-    public boolean removeById(long id) {
+    public boolean removeById(long id, String login) {
         Worker worker = findById(id);
-        if (worker == null) {
+        if (worker == null || !worker.getOwnerLogin().equals(login)) {
             return false;
         }
-        // Удаляет из коллекции через ссылку на объект
-        return collection.remove(worker);
+
+        boolean success = workerDAO.removeWorkerById(id, login);
+        if (success) {
+            collection.remove(worker);
+        }
+        return success;
     }
 
     public void clearOwned(String login) {
@@ -60,45 +64,55 @@ public class CollectionManager {
 
     public boolean update(long id, Worker newWorker, String login) {
         Worker oldWorker = findById(id);
-        if (oldWorker == null) {
+        if (oldWorker == null || !oldWorker.getOwnerLogin().equals(login)) {
             return false;
         }
-        if (!oldWorker.getOwnerLogin().equals(login)) {
-            return false;
-        }
+
         newWorker.setId(id);
         newWorker.setOwnerLogin(login);
-        collection.remove(oldWorker);
-        collection.add(newWorker);
 
-        return true;
+        boolean success = workerDAO.updateWorker(id, newWorker, login);
+        if (success) {
+            collection.remove(oldWorker);
+            collection.add(newWorker);
+        }
+        return success;
     }
 
     public int removeLower(Worker compareWorker, String login) {
-        int removed = 0;
-        collection.removeIf(worker -> worker.getSalary() < compareWorker.getSalary()
-                && worker.getOwnerLogin().equals(login));
-
+        int removed = workerDAO.removeLower(compareWorker.getSalary(), login);
+        if (removed > 0) {
+            collection.removeIf(w ->
+                    w.getSalary() < compareWorker.getSalary()
+                            && w.getOwnerLogin().equals(login)
+            );
+        }
         return removed;
     }
     public boolean removeAnyByStatus(String status, String login) {
-
-        Worker worker = collection.stream().filter(w -> w.getStatus().name().equalsIgnoreCase(status)
-                && w.getOwnerLogin().equals(login)).findFirst().orElse(null);
-
-        if (worker == null) {
-            return false;
+        boolean success = workerDAO.removeAnyByStatus(status, login);
+        if (success) {
+            // удаляем первый найденный с таким статусом
+            for (Worker w : collection) {
+                if (w.getStatus().name().equalsIgnoreCase(status)
+                        && w.getOwnerLogin().equals(login)) {
+                    collection.remove(w);
+                    break;
+                }
+            }
         }
-
-        return collection.remove(worker);
+        return success;
     }
+
     public boolean addIfMax(Worker worker) {
         Worker max = getMaxWorker();
-
-        if (max == null || worker.getSalary() > max.getSalary()) {
-            return add(worker);
+        if (max != null && worker.getSalary() <= max.getSalary()) {
+            return false;
         }
-
-        return false;
+        boolean success = workerDAO.addWorker(worker);
+        if (success) {
+            collection.add(worker);
+        }
+        return success;
     }
 }

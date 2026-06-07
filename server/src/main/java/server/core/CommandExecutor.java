@@ -84,7 +84,7 @@ public class CommandExecutor {
                     return new Response(false, "Not your object");
                 }
 
-                boolean removed = manager.removeById(cmd.getId());
+                boolean removed = manager.removeById(cmd.getId(), login);
                 return new Response(removed, removed ? "Removed" : "Remove failed");
             }
 
