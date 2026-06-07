@@ -13,10 +13,7 @@ public class DatabaseManager {
 
     private Connection connection;
 
-    public DatabaseManager(
-            String username,
-            String password
-    ) {
+    public DatabaseManager(String username, String password) {
         this.username = username;
         this.password = password;
     }

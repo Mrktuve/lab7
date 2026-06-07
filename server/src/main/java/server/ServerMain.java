@@ -10,10 +10,7 @@ import server.network.ServerNetworkHandler;
 
 public class ServerMain {
 
-    public static void main(
-            String[] args
-    ) {
-
+    public static void main(String[] args) {
         try {
 
             DatabaseManager db = new DatabaseManager("s502880", "GjmeEQmtBUUlgALJ");

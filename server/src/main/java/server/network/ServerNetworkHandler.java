@@ -33,20 +33,26 @@ public class ServerNetworkHandler {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connected: " + clientSocket.getInetAddress());
-
+                // отправляет пул потоков на выполнение
                 readPool.submit(() -> {
-                    Request request = requestReader.read(clientSocket);
+                    Request request = requestReader.read(clientSocket); // берем запрос с соеденения с клиентом
                     if (request == null) {
-                        return;
+                        return; // если запрос пустой, то ничего не возвращаем
                     }
 
+                    // создаем новый поток
                     new Thread(() -> {
-
+                        //берем запрос, который надо выполнить и выполняем
                         Response response = commandExecutor.execute(request);
+                        //отправляем пул потоков обратно
                         sendPool.submit(() -> responseSender.send(clientSocket, response));
 
                     }).start();
                 });
+
+
+
+
             }
 
         } catch (IOException e) {

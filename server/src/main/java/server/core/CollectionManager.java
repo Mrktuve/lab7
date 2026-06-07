@@ -76,13 +76,9 @@ public class CollectionManager {
 
     public int removeLower(Worker compareWorker, String login) {
         int removed = 0;
-        for (Worker worker : collection) {
-            if (worker.getSalary() < compareWorker.getSalary() && worker.getOwnerLogin().equals(login)) {
-                collection.remove(worker);
+        collection.removeIf(worker -> worker.getSalary() < compareWorker.getSalary()
+                && worker.getOwnerLogin().equals(login));
 
-                removed++;
-            }
-        }
         return removed;
     }
     public boolean removeAnyByStatus(String status, String login) {

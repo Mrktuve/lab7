@@ -30,7 +30,6 @@ public class ClientMain {
                 }
 
                 String commandName = command.getName();
-
                 if (commandName.equals("register") || commandName.equals("login")) {
 
                     System.out.print("Login: ");
@@ -40,11 +39,8 @@ public class ClientMain {
                     String password = reader.readLine();
 
 
-
                     Request request = new Request(command, login, password);
-
                     Response response = client.sendRequest(request);
-
                     System.out.println(response.getMessage());
 
                     if (response.isSuccess()) {
@@ -55,16 +51,13 @@ public class ClientMain {
                     continue;
                 }
 
-
                 if (!auth.isAuthorized()) {
                     System.out.println("Please login first");
                     continue;
                 }
 
                 Request request = new Request(command, auth.getLogin(), auth.getPassword());
-
                 Response response = client.sendRequest(request);
-
                 System.out.println(response.getMessage());
 
             } catch (Exception e) {

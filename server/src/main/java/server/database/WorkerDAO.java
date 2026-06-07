@@ -53,11 +53,10 @@ public class WorkerDAO {
 
             stmt.setDouble(5, worker.getSalary());
 
-            stmt.setDate(6, Date.valueOf(String.valueOf(worker.getStartDate())));
+            stmt.setDate(6, Date.valueOf(worker.getStartDate()));
 
             if (worker.getEndDate() != null) {
                 stmt.setTimestamp(7, Timestamp.valueOf(worker.getEndDate()));
-
             } else {
                 stmt.setNull(7, Types.TIMESTAMP);
             }
@@ -99,7 +98,6 @@ public class WorkerDAO {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-
                 Worker worker = Worker.fromResultSet(rs);
                 workers.add(worker);
             }

@@ -27,9 +27,7 @@ public class UserDAO {
         ) {
 
             stmt.setString(1, login);
-
-            stmt.setString(2, PasswordHasher.hashPassword(password)
-            );
+            stmt.setString(2, PasswordHasher.hashPassword(password));
 
             stmt.executeUpdate();
             return true;
@@ -54,8 +52,7 @@ public class UserDAO {
         ) {
 
             stmt.setString(1, login);
-            stmt.setString(2, PasswordHasher.hashPassword(password)
-            );
+            stmt.setString(2, PasswordHasher.hashPassword(password));
 
             ResultSet rs = stmt.executeQuery();
             return rs.next();

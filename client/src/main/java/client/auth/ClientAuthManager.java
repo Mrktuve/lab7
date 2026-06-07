@@ -6,7 +6,6 @@ public class ClientAuthManager {
     private String password;
 
     public void setCredentials(String login, String password) {
-
         this.login = login;
         this.password = password;
     }

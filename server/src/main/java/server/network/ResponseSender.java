@@ -16,8 +16,6 @@ public class ResponseSender {
             out.writeObject(response); // преобразует обьект в респонз в байты и записывает в сокет
             out.flush(); // принудительно сбрасывает все буферизованные байты в сеть
 
-
-
         } catch (Exception e) {
 
             e.printStackTrace();
